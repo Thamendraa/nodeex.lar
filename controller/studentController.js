@@ -13,9 +13,9 @@ exports.renderLogin = async(req,res)=>{
 
 
 exports.createStudent = async(req,res) =>{
-    console.log(req.body)
+    console.log(req.file)
     //destructuring objects
-    const {name,email,address,password}=req.body 
+    const {name,email,address,password,image}=req.body 
     
     // const name = req.body.name;
     // const email = req.body.email;
@@ -31,6 +31,8 @@ exports.createStudent = async(req,res) =>{
         email,
         address,
         password: bcrypt.hashSync(password,12),
+        image: req.file.filename,
+        // or image: "http://localhost:4000/"+req.file.filename,
     })
     // redirecting to another page
     res.redirect('/login')
@@ -62,19 +64,6 @@ exports.createStudent = async(req,res) =>{
             res.redirect("/login");    
         }
     
-        // if(foundStudent.length==0){
-        //     return res.redirect("/login");
-        // }
-
-        // console.log(foundStudent[0].password);// to get the password only
-        // console.log(bcrypt.compareSycnc(password,foundStudent[0].password));//to check the password is right 
-        
-
-        // if(bcrypt.compareSycnc(password,foundStudent[0].password)){
-        // res.redirect('/home');
-        // }else{
-        //     res.redirect("/login");
-        // }
 
 }
 

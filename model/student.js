@@ -17,6 +17,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull:false,
       },
       
+      image:{
+        type:DataTypes.STRING,
+        allowNull:true,
+      },
+
     });
     return Student;
   };
