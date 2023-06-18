@@ -11,7 +11,7 @@ app.set("view engine","ejs");//gobal call garnu ko lagi
 
 //database
 const db = require("./model/index");
-db.sequelize.sync({ force: true }); 
+db.sequelize.sync({ force: false }); 
 
 //calling from the controller
 app.get("/", studentController.index);

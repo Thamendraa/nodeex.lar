@@ -1,6 +1,7 @@
 const { name } = require("ejs");
 const db = require("../model/index");
 const Student = db.student;
+const bcrypt = require("bcryptjs");
 
 exports.index = async(req,res) => {
     res.render("index");
@@ -29,7 +30,7 @@ exports.createStudent = async(req,res) =>{
         name,
         email,
         address,
-        password:bcrypt.hashSync(password,12),
+        password: bcrypt.hashSync(password,12),
     })
     // redirecting to another page
     res.redirect('/login')
@@ -38,27 +39,43 @@ exports.createStudent = async(req,res) =>{
     // for login
     exports.loginStudent= async(req,res) =>{
         console.log(req.body)
-        const {password,eamil} = req.body
-    
+        const {password,email} = req.body
+        console.log(email,password);
+
         const foundStudent = await db.student.findAll({
             where:{
-                email: eamil,
-                // password:bcrypt.compareSync() ,
+                email: email,
+    
             }
         });
-        if(foundStudent.length==0){
-            return res.redirect("/login");
-        }
 
-        console.log(foundStudent[0].password);// to get the password only
-        console.log(bcrypt.compareSycnc(password,foundStudent[0].password));//to check the password is right 
+        if(foundStudent.length==0){     //checking if email exists
+            return res.redirect("/login");   
+        }
+    
+        console.log(foundStudent[0].password);
+        console.log(bcrypt.compareSync(password,foundStudent[0].password));
+    
+        if(bcrypt.compareSync(password,foundStudent[0].password)){ 
+            res.redirect("/home");
+        } else{
+            res.redirect("/login");    
+        }
+    
+        // if(foundStudent.length==0){
+        //     return res.redirect("/login");
+        // }
+
+        // console.log(foundStudent[0].password);// to get the password only
+        // console.log(bcrypt.compareSycnc(password,foundStudent[0].password));//to check the password is right 
         
 
-        if(bcrypt.compareSycnc(password,foundStudent[0].password)){
-        res.redirect('/home');
-        }else{
-            res.redirect("/login");
-        }
+        // if(bcrypt.compareSycnc(password,foundStudent[0].password)){
+        // res.redirect('/home');
+        // }else{
+        //     res.redirect("/login");
+        // }
+
 }
 
     
