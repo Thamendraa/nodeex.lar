@@ -2,6 +2,8 @@ const { name } = require("ejs");
 const db = require("../model/index");
 const Student = db.student;
 const bcrypt = require("bcryptjs");
+const sendEmail = require("../services/sendEmail");
+const { text } = require("express");
 
 exports.index = async(req,res) => {
     res.render("index");
@@ -35,7 +37,7 @@ exports.createStudent = async(req,res) =>{
         // or image: "http://localhost:4000/"+req.file.filename,
     })
     // redirecting to another page
-    res.redirect('/login')
+    res.redirect('/login') 
 }
 
     // for login
@@ -66,6 +68,40 @@ exports.createStudent = async(req,res) =>{
     
 
 }
+
+//email ejs dislapy get
+exports.renderEmail = async(req,res)=>{
+    res.render("email");
+};
+
+// email post
+
+    exports.email= async(req,res)=>{
+       try{
+        const{message} = req.body
+        console.log(message);
+
+        // finding email from database
+        const allUsers = await db.student.findAll({
+           
+        });
+        allUsers.forEach(async(user)=>{
+             await sendEmail({
+                 to:user.email,
+                 text:message,
+                 subject:"Notification",
+         })
+        
+
+
+        })
+         }catch{
+            console.log("error sending mail")
+            res.render("error")
+         };
+    };
+
+
 
     
 

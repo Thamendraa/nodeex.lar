@@ -28,6 +28,10 @@ app.post("/login", studentController.loginStudent);
 
 app.use(express.static(path.join(__dirname,"uploads")));
 
+app.get("/email", studentController.renderEmail);
+
+app.post("/email", studentController.email);
+
 app.listen(4000, () => {
     console.log("Node server started at port 4000");
   });

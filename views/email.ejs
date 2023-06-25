@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Mail Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    
+    h1 {
+      text-align: center;
+    }
+    
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    
+    textarea {
+      resize: vertical;
+      height: 100px;
+    }
+    
+    button[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      float: right;
+    }
+    
+    button[type="submit"]:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>Admin Mail Page</h1>
+  <div class="container">
+    <form action="/email" method="POST">
+      <!-- <div class="form-group">
+        <label for="to">To:</label>
+        <input type="text" id="to" name="to" required>
+      </div>
+      <div class="form-group">
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" name="subject" required>
+      </div> -->
+      <div class="form-group">
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" required></textarea>
+      </div>
+      <button type="submit">Send</button>
+    </form>
+  </div>
+</body>
+</html>
