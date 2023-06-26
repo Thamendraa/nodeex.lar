@@ -27,7 +27,7 @@ exports.createStudent = async(req,res) =>{
     
 
     //adding in database tabel
-    db.student.create({
+    const created = await db.student.create({
         // Name : name,(If the columne name is different in table ,table columne name 1st and object 2nd)
         name,
         email,
@@ -35,7 +35,14 @@ exports.createStudent = async(req,res) =>{
         password: bcrypt.hashSync(password,12),
         image: req.file.filename,
         // or image: "http://localhost:4000/"+req.file.filename,
-    })
+    });
+    console.log(created);
+
+    await sendEmail({
+        to:email,
+        text:"SucessFully registered",
+        subject:"SUSC",
+        })
     // redirecting to another page
     res.redirect('/login') 
 }
@@ -78,22 +85,20 @@ exports.renderEmail = async(req,res)=>{
 
     exports.email= async(req,res)=>{
        try{
-        const{message} = req.body
-        console.log(message);
+        const{message,subject} = req.body
+        console.log(message,subject);
 
-        // finding email from database
+        //finding email from database
         const allUsers = await db.student.findAll({
            
         });
+          
         allUsers.forEach(async(user)=>{
              await sendEmail({
                  to:user.email,
                  text:message,
-                 subject:"Notification",
+                 subject:subject,
          })
-        
-
-
         })
          }catch{
             console.log("error sending mail")
@@ -101,7 +106,11 @@ exports.renderEmail = async(req,res)=>{
          };
     };
 
+    // forget password
+    exports.renderFpassword= async(req,res)=>{
+        res.render("forgotPassword");
+    };
 
-
-    
-
+    exports.rederResetPwd= async(req,res) =>{
+        res.render("resetPwd");
+    };
