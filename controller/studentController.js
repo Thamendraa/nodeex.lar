@@ -114,3 +114,67 @@ exports.renderEmail = async(req,res)=>{
     exports.rederResetPwd= async(req,res) =>{
         res.render("resetPwd");
     };
+
+    // reset pwd
+    exports.verifyEmail= async(req,res)=>{
+        const {email} = req.body
+        console.log(email);
+
+        const isFound = await db.student.findAll({
+            where:{
+                email: email,
+    
+            }
+        });
+        console.log(isFound);
+        if(isFound.length==0){ 
+            console.log("email not found");
+            return res.redirect("/forgotPassword");   
+        }
+        else{
+            console.log("email found");
+            try{
+                const randomOTP = Math.floor(100000 + Math.random() * 900000);
+                const message = "your OTP is R-"+randomOTP+"."
+            await sendEmail({
+                to:email,
+                text:message,
+                subject:"SUSC",
+                });
+
+            console.log("eamail send")
+            isFound[0].otp = randomOTP;
+            await isFound[0].save();
+
+            } catch(e){
+                console.log("error sending mail")
+                res.render("error")
+            };
+            return res.redirect("/resetPwd");
+        }
+    };
+
+    // after otp
+    exports.newPassword = async(req,res)=>{
+        const {otp,password} = req.body
+        console.log(otp,password);
+
+        const encPassword= bcrypt.hashSync(password,12);
+
+        const foundOTP = await db.student.findAll({
+            where:{
+               otp: otp,
+            }
+        });  
+         if(foundOTP.length != 0){
+                foundOTP[0].password=encPassword,
+                foundOTP[0].otp= null,
+               await foundOTP[0].save();
+         }
+         else{
+            console.log("otp no match");
+            res.redirect("/restPassword");
+         };
+         return res.redirect("/login");
+    };
+

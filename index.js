@@ -34,7 +34,14 @@ app.post("/email", studentController.email);
 
 app.get("/forgotPassword", studentController.renderFpassword);
 
+app.post("/forgotPassword", studentController.verifyEmail);
+
+app.post("/resetPwd",studentController.newPassword);
+
 app.get("/resetPwd",studentController.rederResetPwd);
+
+
+
 app.listen(4000, () => {
     console.log("Node server started at port 4000");
   });
